@@ -47,7 +47,7 @@ txgh_config: "blah" #|-
 #    transifex:
 #      projects:
 #        <transifex project>:
-#          tx_config: /usr/src/app/config #Must be set to this
+#          tx_config: /root/.tx/config #Must be set to this
 #          api_username: api
 #          api_password: blah
 #          push_translations_to: <must match github project name above>
