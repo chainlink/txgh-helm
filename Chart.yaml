@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A helm chart for the txgh application
+name: txgh
+version: 0.1.0

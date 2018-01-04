@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "txgh.fullname" . }}
+  labels:
+    app: {{ template "txgh.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  tx_config: {{ required "You must specify a tx_config" .Values.tx_config | quote }}

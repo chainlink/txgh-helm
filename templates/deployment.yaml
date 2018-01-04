@@ -1,0 +1,65 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "txgh.fullname" . }}
+  labels:
+    app: {{ template "txgh.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "txgh.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ required "A valid image repository is required" .Values.image.repository }}:{{ required "A valid tag repository is required" .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /health_check
+              port: {{ .Values.service.internalPort }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic Zm9vOmJhcg==
+            initialDelaySeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health_check
+              port: {{ .Values.service.internalPort }}
+              httpHeaders:
+                - name: Authorization
+                  value: Basic Zm9vOmJhcg==
+            initialDelaySeconds: 5
+          env:
+            - name: LOG_LEVEL
+              value: info
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+            - name: txgh-secret
+              mountPath: /usr/src/app/config
+              readOnly: true
+            - name: tx-config
+              mountPath: /root/.tx
+              readOnly: true
+      volumes:
+        - name: txgh-secret
+          secret:
+            secretName: {{ template "txgh.fullname" . }}
+        - name: tx-config
+          configMap:
+            name: {{ template "txgh.fullname" . }}
+            items:
+              - key: tx_config
+                path: config
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}

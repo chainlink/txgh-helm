@@ -1,0 +1,54 @@
+# Default values for txgh.
+replicaCount: 1
+image:
+  repository: "blah"
+  tag: "blah"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  externalPort: 80
+  internalPort: 9292
+ingress: {} #TODO make required
+#  hosts:
+#    - txgh.blah.com
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
+#    kubernetes.io/tls-acme: "true"
+#  tls:
+#    - secretName: secret
+#      hosts:
+#        - txgh.blah.com
+resources: {}
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
+tx_config: "blah" #|-
+#  [main]
+#  host = https://www.transifex.com
+#
+#  [<transifex project>.<resource>]
+#  file_filter = src/translations/locales/<lang>.json
+#  source_file = src/translations/locales/en.json
+#  source_lang = en
+#  type = json
+txgh_config: "blah" #|-
+#  txgh:
+#    github:
+#      repos:
+#        <github repo>
+#          api_username: blah
+#          api_token: blah
+#          push_source_to: <must match transifex project name below>
+#          branch: transifex #optional
+#          webhook_secret: blah
+#    transifex:
+#      projects:
+#        <transifex project>:
+#          tx_config: /usr/src/app/config #Must be set to this
+#          api_username: api
+#          api_password: blah
+#          push_translations_to: <must match github project name above>
+#          webhook_secret: blah
