@@ -8,7 +8,8 @@ service:
   type: ClusterIP
   externalPort: 80
   internalPort: 9292
-ingress: {} #TODO make required
+ingress:
+  enabled: false
 #  hosts:
 #    - txgh.blah.com
 #  annotations:
